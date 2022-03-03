@@ -1,7 +1,4 @@
 import chess
-import chess.svg
-from sqlalchemy import false, true
-
 
 def endGame():
     
@@ -30,7 +27,19 @@ def Play():
             print('Movimento invalido, tente novamente.')
             Play(board)
 
+def Play():
 
-
+    while (endGame()):
+          transformList()
+      movement = input("Digite sua jogada: ")
+      try:
+        board.push_san(movement)
+        print(" ")
+        print(board)
+          
+      except:
+        print('Movimento invalido, tente novamente.')
+        Play(board)
+        
 board = chess.Board()
 Play()
