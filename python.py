@@ -3,7 +3,7 @@ import chess.svg
 from sqlalchemy import false, true
 
 
-def endGame(board):
+def endGame():
     
     if(not board.is_checkmate() or not board.is_stalemate() 
     or not board.is_insufficient_material()
@@ -12,9 +12,9 @@ def endGame(board):
     else: 
         return true
 
-def Play(board):
+def Play():
 
-    while(endGame(board)):
+    while(endGame()):
         moves = str(board.legal_moves)
         startingMoves = int(moves.index("(")) 
         endingMoves = int(moves.index(")"))
@@ -32,6 +32,5 @@ def Play(board):
 
 
 
-print(chess.svg.piece(chess.Piece.from_symbol("R")))
 board = chess.Board()
-Play(board)
+Play()
