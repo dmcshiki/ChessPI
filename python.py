@@ -1,45 +1,45 @@
 import chess
 
 def endGame():
+    return not board.is_checkmate(
+      ) or not board.is_stalemate(
+      ) or not board.is_insufficient_material(
+      ) or not board.is_game_over()
+
+def transformList():
+  moves = str(board.legal_moves)
+  startingMoves = int(moves.index("("))
+  endingMoves = int(moves.index(")"))
+  movementList = list(moves[startingMoves + 1:endingMoves].split(" "))
+  print('\n Jogadas disponiveis: ')
+  for move in movementList:
+      print(move)
+
+def botTurn():
+    if(chess.BLACK):
+        return True
     
-    if(not board.is_checkmate() or not board.is_stalemate() 
-    or not board.is_insufficient_material()
-    or not board.is_game_over()):    
-        return false
-    else: 
-        return true
+def minmax(nodes, depth, alpha, beta, player):
+    if(depth == 0 or endGame(board)):
+        return nodes
+    elif(botTurn()):
+        float('-inf')
+        #for(node in nodes)
+        
+        
 
 def Play():
-
-    while(endGame()):
-        moves = str(board.legal_moves)
-        startingMoves = int(moves.index("(")) 
-        endingMoves = int(moves.index(")"))
-        movementList = list(moves[startingMoves+1:endingMoves].split(" "))
-        print('Jogadas disponiveis: ')
-        for move in movementList:
-            print(move)
-        movement = input ("Digite sua jogada: ")
+    
+    while (endGame()):
+        transformList()
+        movement = input("\n Digite sua jogada: ")
         try:
             board.push_san(movement)
-            print(board)
-        except:
-            print('Movimento invalido, tente novamente.')
-            Play(board)
-
-def Play():
-
-    while (endGame()):
-          transformList()
-      movement = input("Digite sua jogada: ")
-      try:
-        board.push_san(movement)
-        print(" ")
-        print(board)
+            print('\n', board)
           
-      except:
-        print('Movimento invalido, tente novamente.')
-        Play(board)
+        except:
+            print('\n Movimento invalido, tente novamente.')
+            Play()
         
 board = chess.Board()
 Play()
