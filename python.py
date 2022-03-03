@@ -1,20 +1,29 @@
 import chess
-import chess.svg
-from sqlalchemy import false, true
 
+def botTurn():
+    if(chess.BLACK):
+        return True
+
+def minmax(nodes, depth, alpha, beta, player):
+    if(depth == 0 or endGame(board)):
+        return nodes
+    elif(botTurn()):
+        float('-inf')
+        for(node in nodes)
+        
+        
 
 def endGame(board):
-    
     if(not board.is_checkmate() or not board.is_stalemate() 
     or not board.is_insufficient_material()
     or not board.is_game_over()):    
-        return false
+        return False
     else: 
-        return true
+        return True
 
 def Play(board):
 
-    while(endGame(board)):
+    while(not endGame(board)):
         moves = str(board.legal_moves)
         startingMoves = int(moves.index("(")) 
         endingMoves = int(moves.index(")"))
@@ -30,8 +39,6 @@ def Play(board):
             print('Movimento invalido, tente novamente.')
             Play(board)
 
-
-
-print(chess.svg.piece(chess.Piece.from_symbol("R")))
 board = chess.Board()
 Play(board)
+
