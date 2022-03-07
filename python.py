@@ -25,8 +25,6 @@ def minmax(nodes, depth, alpha, beta, player):
     elif(botTurn()):
         float('-inf')
         #for(node in nodes)
-        
-        
 
 def Play():
     

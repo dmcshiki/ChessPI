@@ -49,5 +49,9 @@
     "materialTheme.accent": "Breaking Bad",
     "diffEditor.ignoreTrimWhitespace": false,
     "gitlens.hovers.currentLine.over": "line",
-    "sync.gist": "867b5e45d1ce4165926fba87694a5af0"
+    "sync.gist": "867b5e45d1ce4165926fba87694a5af0",
+
+     "AREPL.pythonPath": "~/.pyenv/versions/3.9.6/bin/python",
+    "python.pythonPath": "~/.pyenv/versions/3.9.6/bin/python",
+    "python.defaultInterpreterPath": "/Users/daniel/opt/anaconda3/bin/python",
 }
