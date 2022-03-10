@@ -78,9 +78,17 @@ def minmax(nodes, depth, alpha, beta, player):
         valor = Minmax(no, depth - 1, alpha, beta, True)
         melhorvalor = min(melhorvalor, valor)
         beta = min(beta, melhorvalor)
+<<<<<<< HEAD
         if(beta <= alpha):
           valor = 0
       return valor
+=======
+        
+        if(beta <= alpha):
+          return 0
+          
+    return valor
+>>>>>>> 268d7f663784de8c5ef8432732d61c320dc40afd
       
 def CopyBoard(board):
     boardCopy = chess.Board(board.fen())
