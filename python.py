@@ -62,7 +62,7 @@ def minmax(nodes, depth, alpha, beta, player):
         melhorvalor = min(melhorvalor, valor)
         beta = min(beta, melhorvalor)
         
-        if(beta <= alpfa):
+        if(beta <= alpha):
           return 0
           
     return valor
