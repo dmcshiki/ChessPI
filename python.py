@@ -1,15 +1,13 @@
 import chess
-import chess.engine
 
-
-def EndGame():
+def EndGame(board):
     return board.is_checkmate(
     ) or board.is_stalemate(
     ) or board.is_insufficient_material(
     ) or board.is_game_over()
   
-def score(points):    
-  if EndGame():
+def score(points, board):    
+  if EndGame(board):
     if(board.is_checkmate()):
       if(board.turn):
         points += 10000 
@@ -32,108 +30,91 @@ def score(points):
      
   return points
 
-def transformList():
+def max(x, y):
+    if x > y:
+        return x
+    else:
+        return y
+      
+def min(x, y):
+    if x < y:
+        return x
+    else:
+        return y
+
+def transformList(board):
   moves = str(board.legal_moves)
+  moves = moves.replace(",","")
   startingMoves = int(moves.index("("))
   endingMoves = int(moves.index(")"))
   movementList = list(moves[startingMoves + 1:endingMoves].split(" "))
   return list(movementList)
     
-def Minmax(nodes, depth, alpha, beta, player):
-    if(depth == 0 or EndGame(board)):
-        return nodes
-    elif(player):
-        melhorvalor = float('-inf')
-      
-        for no in nodes:
-          valor = Minmax(no, depth - 1, alpha, beta, False)
-          melhorvalor = max(melhorvalor, valor)
-          alpha = max(melhorvalor, valor)
-      
-        if(beta <= alpha):
-          valor = 0
-    print('\n Jogadas disponiveis: ')
-    for move in transformList():
-      print(move)
-
 def minmax(nodes, depth, alpha, beta, player):
-    if(depth == 0 or EndGame(board)):
-      return nodes
+    boardList = CopyBoard(nodes)
+    if(depth == 0 or EndGame(nodes)):
+      return score(0, nodes)
       
     elif(player):
       melhorvalor = float('-inf')
-    
-      for no in nodes:
+            
+      for no in boardList:
         valor = minmax(no, depth - 1, alpha, beta, False)
         melhorvalor = max(melhorvalor, valor)
-        alpha = max(melhorvalor, valor)
-    
-      if(beta <= alpha):
-        return 0
-        
+        alpha = max(alpha, melhorvalor)
+      return valor
+      
     else:
-      valor = float('inf')
+      melhorvalor = float('inf')
 
-      for no in nodes:
-        valor = Minmax(no, depth - 1, alpha, beta, True)
+      for no in boardList:
+        valor = minmax(no, depth - 1, alpha, beta, True)
         melhorvalor = min(melhorvalor, valor)
         beta = min(beta, melhorvalor)
         
         if(beta <= alpha):
           return 0
           
-    return valor
+      return valor
       
 def CopyBoard(board):
-    boardCopy = chess.Board(board.fen())
     boardList = [] 
-    movements = transformList()
+    movements = transformList(board)
     for i in range(len(movements)):
         boardCopy = chess.Board(board.fen())
+        boardCopy.push_san(movements[i])
         boardList.append(boardCopy)
-        boardList[i] = board.push.san(transformList[i])
     return boardList
          
 def InicialMoves(move):
-  moves = str(board.legal_moves)
-  startingMoves = int(moves.index("("))
-  endingMoves = int(moves.index(")"))
-  movementList = list(moves[startingMoves + 1:endingMoves].split(" "))
-  
   if(move == 1):
     board.push_san("e5")
   elif(move == 2):
     board.push_san("Nc6")
-    print(board)
+  elif(move == 5):
+    CopyBoard(board)
   else:
-    movementList[1]
+    newBoard = minmax(board, 2, 0, 0, True)
+    print(newBoard)
+    l = input()
 
-def copyBoard(fen):
-  board = chess.Board(fen)
-          
-def jogadas(movimentos):
-  transformList()
-  movement = input("\n Digite sua jogada IA: ")
-  board.push_san(movement)
-
-def Play(movimentos):  
-    print(score(points))
+def Play(movimentos):    
   
-    if(not EndGame()):
+    if(not EndGame(board)):
       if(board.is_check()):
         print("-----------Check--------------")
         
       if(not board.turn):
         try:
-          jogadas(movimentos)
+          movimentos += 1
+          InicialMoves(movimentos)
         except:
-          print('\n Movimento invalido, tente novamente.')
+          print('\n Movimento invalido IA, tente novamente.')
       else:
         try:
-          transformList()
+          print(transformList(board))
           movement = input("\n Digite sua jogada: ")
           board.push_san(movement)
-          movimentos += 1
         except:
             print('\n Movimento invalido, tente novamente.')
           
