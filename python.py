@@ -1,7 +1,5 @@
 import chess
 
-#("1k1r4/pp1b1R2/3q2pp/4p3/2B5/4Q3/PPP2B2/2K5 b - - bm Qd1+; id \"BK.01\";")
-
 def EndGame(board):
     return board.is_checkmate(
     ) or board.is_stalemate(
@@ -129,6 +127,6 @@ def Play(movimentos):
         print("-----------Game Over----------")
 
 points = 0
-board = chess.Board()
+board = chess.Board("8/8/8/2k5/3PK3/8/8/8 w - - 4 45")
 movimentos = 0
 Play(movimentos)
