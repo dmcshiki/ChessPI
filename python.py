@@ -127,6 +127,6 @@ def Play(movimentos):
         print("-----------Game Over----------")
 
 points = 0
-board = chess.Board("8/8/8/2k5/3PK3/8/8/8 w - - 4 45")
+board = chess.Board("K7/3r4/8/8/3kr3/8/8/8 w - - 4 45")
 movimentos = 0
 Play(movimentos)
