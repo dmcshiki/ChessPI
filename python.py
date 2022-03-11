@@ -8,12 +8,14 @@ def EndGame(board):
   
 def score(points, board):    
   if EndGame(board):
+    #Pontuação chequeMate
     if(board.is_checkmate()):
       if(board.turn):
         points += 10000 
       else:
         points -= 10000 
     else:
+      #Pontuação Empate
       points -= 5000 
   else:
     #Pontuação peão
@@ -26,60 +28,56 @@ def score(points, board):
     points += 5 * (len(board.pieces(chess.ROOK, chess.BLACK)) - len(board.pieces(chess.ROOK, chess.WHITE)))
     #Pontuação rainha
     points += 9 * (len(board.pieces(chess.QUEEN, chess.BLACK)) - len(board.pieces(chess.QUEEN, chess.WHITE)))
-    #Pontuação chequeMate
      
   return points
 
-def max(x, y):
-    if x > y:
-        return x
-    else:
-        return y
-      
-def min(x, y):
-    if x < y:
-        return x
-    else:
-        return y
-
-def transformList(board):
+def TransformList(board):
   moves = str(board.legal_moves)
   moves = moves.replace(",","")
   startingMoves = int(moves.index("("))
   endingMoves = int(moves.index(")"))
   movementList = list(moves[startingMoves + 1:endingMoves].split(" "))
   return list(movementList)
-    
-def minmax(nodes, depth, alpha, beta, player):
-    boardList = CopyBoard(nodes)
-    if(depth == 0 or EndGame(nodes)):
-      return score(0, nodes)
-      
-    elif(player):
-      melhorvalor = float('-inf')
-            
-      for no in boardList:
-        valor = minmax(no, depth - 1, alpha, beta, False)
-        melhorvalor = max(melhorvalor, valor)
-        alpha = max(alpha, melhorvalor)
-      return valor
-      
-    else:
-      melhorvalor = float('inf')
+  
+def MinMax_AlphaBeta(nodes, player, depth = 8, alpha = float("-inf"), beta = float("inf")):
+  mov = nodes
+  
+  if(depth == 0 or EndGame(nodes)):
+    return score(0, nodes), nodes
 
-      for no in boardList:
-        valor = minmax(no, depth - 1, alpha, beta, True)
-        melhorvalor = min(melhorvalor, valor)
-        beta = min(beta, melhorvalor)
-        
-        if(beta <= alpha):
-          return 0
-          
-      return valor
+  if player:
+    for no in CopyBoard(nodes):
+      value, mov = MinMax_AlphaBeta(no, False, depth - 1, alpha, beta)
+      alpha = max(value, alpha)
+      if beta <= alpha:
+        break
+      return alpha, no
+  else:
+    for no in CopyBoard(nodes):
+      value, mov = MinMax_AlphaBeta(no, True, depth - 1, alpha, beta)
+      beta = min(value, beta)
+      if beta <= alpha:
+        break
+      return beta, no
+
+def FindMovement():
+  #so I find wicth moviment will make this score
+  value, mov =  MinMax_AlphaBeta(board, True)
+  print("\n",value,"\n",mov,"\n")
+  
+  for i in CopyBoard(board):
+    boardCopy = chess.Board(board.fen())
+    print(TransformList(board))
+    boardCopy.push_san(movements[i])
+    if mov == boardCopy:
+      movement = movements[i]
+      print(movement)
       
+  l = input()
+  
 def CopyBoard(board):
     boardList = [] 
-    movements = transformList(board)
+    movements = TransformList(board)
     for i in range(len(movements)):
         boardCopy = chess.Board(board.fen())
         boardCopy.push_san(movements[i])
@@ -87,32 +85,36 @@ def CopyBoard(board):
     return boardList
          
 def InicialMoves(move):
-  if(move == 1):
-    board.push_san("e5")
-  elif(move == 2):
-    board.push_san("Nc6")
-  elif(move == 5):
-    CopyBoard(board)
-  else:
-    newBoard = minmax(board, 2, 0, 0, True)
-    print(newBoard)
-    l = input()
+  #if move == 1:
+  #  board.push_san("e5")
+  #elif move == 2:
+  #  board.push_san("Nf6")
+  #elif move == 3:
+  #  board.push_san("Bc5")
+  #elif move == 4:
+  #  board.push_san("d6")
+  #else:
+    FindMovement()
+
+#def jogadas():
+  #print(TransformList(board))
+  #movement = input("\n Digite sua jogada IA: ")
+  #board.push_san(movement)
 
 def Play(movimentos):    
-  
-    if(not EndGame(board)):
-      if(board.is_check()):
+    if not EndGame(board):
+      if board.is_check():
         print("-----------Check--------------")
         
-      if(not board.turn):
-        try:
-          movimentos += 1
+      if not board.turn:
+        #try:
           InicialMoves(movimentos)
-        except:
-          print('\n Movimento invalido IA, tente novamente.')
+          movimentos += 1
+        #except:
+          #print('\n Movimento invalido IA, tente novamente.')
       else:
         try:
-          print(transformList(board))
+          print(TransformList(board))
           movement = input("\n Digite sua jogada: ")
           board.push_san(movement)
         except:
@@ -128,5 +130,5 @@ def Play(movimentos):
 
 points = 0
 board = chess.Board("K7/3r4/8/8/3kr3/8/8/8 w - - 4 45")
-movimentos = 0
+movimentos = 1
 Play(movimentos)
