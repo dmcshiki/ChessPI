@@ -1,5 +1,7 @@
 import chess
 
+#("1k1r4/pp1b1R2/3q2pp/4p3/2B5/4Q3/PPP2B2/2K5 b - - bm Qd1+; id \"BK.01\";")
+
 def EndGame(board):
     return board.is_checkmate(
     ) or board.is_stalemate(
