@@ -39,41 +39,37 @@ def TransformList(board):
   movementList = list(moves[startingMoves + 1:endingMoves].split(" "))
   return list(movementList)
   
-def MinMax_AlphaBeta(nodes, player, depth = 8, alpha = float("-inf"), beta = float("inf")):
-  mov = nodes
+def Minmax_alphabeta(nodes, ia, depth, alpha = float("-inf"), beta = float("inf")):
   
+  #se o jogo acabou ou se a profundida 
+  # maxima foi atingida
   if(depth == 0 or EndGame(nodes)):
-    return score(0, nodes), nodes
+    return score(0, nodes)
+  #se é a vez da IA
+  if ia: #turno da IA (max)
+      for board in CopyBoard(nodes):
+        value = Minmax_alphabeta(board, False, depth - 1, alpha, beta)
+        alpha = max(value, alpha)
+        if beta <= alpha:
+          continue
+        return alpha
+  else: #turno do player (min)
+     for board in CopyBoard(nodes):    
+        value = Minmax_alphabeta(board, True, depth - 1, alpha, beta)
+        beta = min(value, beta)
+        if beta <= alpha:
+          continue
+        return beta
 
-  if player:
-    for no in CopyBoard(nodes):
-      value, mov = MinMax_AlphaBeta(no, False, depth - 1, alpha, beta)
-      alpha = max(value, alpha)
-      if beta <= alpha:
-        break
-      return alpha, no
-  else:
-    for no in CopyBoard(nodes):
-      value, mov = MinMax_AlphaBeta(no, True, depth - 1, alpha, beta)
-      beta = min(value, beta)
-      if beta <= alpha:
-        break
-      return beta, no
-
-def FindMovement():
-  #so I find wicth moviment will make this score
-  value, mov =  MinMax_AlphaBeta(board, True)
-  print("\n",value,"\n",mov,"\n")
-  
-  for i in CopyBoard(board):
-    boardCopy = chess.Board(board.fen())
-    print(TransformList(board))
-    boardCopy.push_san(movements[i])
-    if mov == boardCopy:
-      movement = movements[i]
-      print(movement)
-      
-  l = input()
+def BestMove_poda(board, depth = 8):
+  max = float("-inf")
+  bestMove = -1
+  for nextBoard in CopyBoard(board):
+    value = Minmax_alphabeta(nextBoard, False, depth)
+    if value > max:
+      max = value
+      bestMove = nextBoard
+  return bestMove
   
 def CopyBoard(board):
     boardList = [] 
@@ -85,33 +81,35 @@ def CopyBoard(board):
     return boardList
          
 def InicialMoves(move):
-  #if move == 1:
-  #  board.push_san("e5")
-  #elif move == 2:
-  #  board.push_san("Nf6")
-  #elif move == 3:
-  #  board.push_san("Bc5")
-  #elif move == 4:
-  #  board.push_san("d6")
-  #else:
-    FindMovement()
-
-#def jogadas():
-  #print(TransformList(board))
-  #movement = input("\n Digite sua jogada IA: ")
-  #board.push_san(movement)
+  if move == 1:
+    board.push_san("e5")
+  elif move == 2:
+    board.push_san("Nf6")
+  elif move == 3:
+    board.push_san("Bc5")
+  elif move == 4:
+    board.push_san("d6")
+  else:
+    bestBoard = BestMove_poda(board)
+    for move in TransformList(board):
+      boardCopy = chess.Board(board.fen())
+      boardCopy.push_san(move)
+      
+      if boardCopy == bestBoard:
+        bestMovement = move
+    print("O computador decidiu que o movimento ganhador é: ", board.push_san(bestMovement))  
+    board.push_san(bestMovement)
 
 def Play(movimentos):    
+    print(board)
+
     if not EndGame(board):
       if board.is_check():
-        print("-----------Check--------------")
-        
+        print("Check")   
       if not board.turn:
-        #try:
-          InicialMoves(movimentos)
-          movimentos += 1
-        #except:
-          #print('\n Movimento invalido IA, tente novamente.')
+        print('O computador está pensando em como ganhar de você...')
+        InicialMoves(movimentos)
+        movimentos += 1
       else:
         try:
           print(TransformList(board))
@@ -120,15 +118,15 @@ def Play(movimentos):
         except:
             print('\n Movimento invalido, tente novamente.')
           
-      print(board)
-      Play(movimentos)    
+      Play(movimentos) 
+      
     else:
       if board.is_checkmate():
-        print("-----------Check Mate---------")
+        print("Check Mate")
       else:
-        print("-----------Game Over----------")
-
+        print("Fim de jogo!")
+        
 points = 0
-board = chess.Board("K7/3r4/8/8/3kr3/8/8/8 w - - 4 45")
+board = chess.Board()
 movimentos = 1
 Play(movimentos)
