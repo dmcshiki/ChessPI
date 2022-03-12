@@ -92,10 +92,9 @@ def InicialMoves(move):
     for move in TransformList(board):
       boardCopy = chess.Board(board.fen())
       boardCopy.push_san(move)
-      
       if boardCopy == bestBoard:
         bestMovement = move
-    print("O computador decidiu que o movimento ganhador é: ", board.push_san(bestMovement))  
+    print("O computador decidiu que o movimento ganhador é: ", bestMovement)  
     board.push_san(bestMovement)
 
 def Play(movimentos):    
