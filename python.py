@@ -124,7 +124,6 @@ def Play(movimentos):
       else:
         print("Fim de jogo!")
         
-#"8/4Kr2/8/8/3kr3/8/8/8 w - - 4 45"
 points = 0
 board = chess.Board()
 movimentos = 1
