@@ -61,7 +61,7 @@ def Minmax_alphabeta(nodes, ia, depth, alpha = float("-inf"), beta = float("inf"
           continue
         return beta
 
-def BestMove_poda(board, depth = 8):
+def BestMove_poda(board, depth = 20):
   max = float("-inf")
   bestMove = -1
   for nextBoard in CopyBoard(board):
@@ -84,11 +84,9 @@ def InicialMoves(move):
   if move == 1:
     board.push_san("e5")
   elif move == 2:
-    board.push_san("Nf6")
+    board.push_san("Nc6")
   elif move == 3:
-    board.push_san("Bc5")
-  elif move == 4:
-    board.push_san("d6")
+    board.push_san("Be7")
   else:
     bestBoard = BestMove_poda(board)
     for move in TransformList(board):
@@ -126,6 +124,7 @@ def Play(movimentos):
       else:
         print("Fim de jogo!")
         
+#"8/4Kr2/8/8/3kr3/8/8/8 w - - 4 45"
 points = 0
 board = chess.Board()
 movimentos = 1
