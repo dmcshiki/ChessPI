@@ -1,11 +1,13 @@
 import chess
 
+##
 def EndGame(board):
     return board.is_checkmate(
     ) or board.is_stalemate(
     ) or board.is_insufficient_material(
     ) or board.is_game_over()
   
+#  
 def score(points, board):    
   if EndGame(board):
     #Pontuação chequeMate
@@ -30,7 +32,8 @@ def score(points, board):
     points += 9 * (len(board.pieces(chess.QUEEN, chess.BLACK)) - len(board.pieces(chess.QUEEN, chess.WHITE)))
      
   return points
-
+  
+##
 def TransformList(board):
   moves = str(board.legal_moves)
   moves = moves.replace(",","")
@@ -38,9 +41,9 @@ def TransformList(board):
   endingMoves = int(moves.index(")"))
   movementList = list(moves[startingMoves + 1:endingMoves].split(" "))
   return list(movementList)
-  
+
+#
 def Minmax_alphabeta(nodes, ia, depth, alpha = float("-inf"), beta = float("inf")):
-  
   #se o jogo acabou ou se a profundida 
   # maxima foi atingida
   if(depth == 0 or EndGame(nodes)):
@@ -60,8 +63,9 @@ def Minmax_alphabeta(nodes, ia, depth, alpha = float("-inf"), beta = float("inf"
         if beta <= alpha:
           continue
         return beta
-
-def BestMove_poda(board, depth = 20):
+       
+#
+def BestMove_poda(board, depth = 3):
   max = float("-inf")
   bestMove = -1
   for nextBoard in CopyBoard(board):
@@ -70,7 +74,8 @@ def BestMove_poda(board, depth = 20):
       max = value
       bestMove = nextBoard
   return bestMove
-  
+
+#
 def CopyBoard(board):
     boardList = [] 
     movements = TransformList(board)
@@ -79,7 +84,8 @@ def CopyBoard(board):
         boardCopy.push_san(movements[i])
         boardList.append(boardCopy)
     return boardList
-         
+
+##
 def InicialMoves(move):
   if move == 1:
     board.push_san("e5")
@@ -97,6 +103,7 @@ def InicialMoves(move):
     print("O computador decidiu que o movimento ganhador é: ", bestMovement)  
     board.push_san(bestMovement)
 
+##
 def Play(movimentos):    
     print(board)
 
